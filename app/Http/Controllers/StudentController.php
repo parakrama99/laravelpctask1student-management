@@ -27,9 +27,27 @@ class StudentController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        //
-    }
+{
+    // Validate the incoming request data
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'phone' => 'required|digits:10', // Validates exactly 10 digits
+        'email' => 'required|email|unique:students,email',
+    ]);
+
+    // Create a new student instance and assign values
+    $student = new Student();
+    $student->name = $request->name;
+    $student->phone = $request->phone;
+    $student->email = $request->email;
+
+    // Save the student to the database
+    $student->save();
+
+    // Redirect or respond with a success message
+    return back()->with('success', 'Student created successfully.');
+}
+
 
     /**
      * Display the specified resource.
