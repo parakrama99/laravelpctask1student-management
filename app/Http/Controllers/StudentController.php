@@ -12,6 +12,9 @@ class StudentController extends Controller
      */
     public function index()
     {
+        // dd("ssd"); will output `"ssd"` and immediately stop script execution. It is useful for debugging and checking if a function reaches a certain point.
+
+
         $students = Student::all();
         // return view('students.index', ['students' => $students]);
         return view('students.index', compact('students'));
@@ -30,6 +33,9 @@ class StudentController extends Controller
      */
     public function store(Request $request)
 {
+
+    // dd($request->all()); to check from frontend
+
     // Validate the incoming request data
     $request->validate([
         'name' => 'required|string|max:255',
@@ -47,33 +53,55 @@ class StudentController extends Controller
     $student->save();
 
     // Redirect or respond with a success message
-    return back()->with('success', 'Student created successfully.');
+    return back()->with('msg', 'Student created successfully.');
+    //  return redirect()->route('students.index')->with('success', 'Student created successfully.');
 }
 
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Student $student)
     {
-        //
+        // Pass the specific student data to the 'students.show' view
+        return view('students.show', compact('student'));
     }
+
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Student $student)
     {
-        //
+        return view('students.edit', compact('student'));
     }
-
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Student $student)
     {
-        //
+        // Validate the incoming request data
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|digits:10',
+            'email' => 'required|email',
+        ]);
+
+        // Update the student's attributes
+        $student->name = $validated['name'];
+        $student->phone = $validated['phone'];
+        $student->email = $validated['email'];
+
+        // Save the updated student to the database
+        $student->save();
+
+        // Redirect or return a response
+        return redirect()->route('students.index')->with('msg', 'Student updated successfully.');
     }
+
+
+
+
 
     /**
      * Remove the specified resource from storage.
