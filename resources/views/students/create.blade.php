@@ -67,6 +67,23 @@
                 @enderror
             </div>
 
+                    {{-- Status Field --}}
+     <div class="mb-4">
+            <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+            <select id="status" name="status" required
+                class="block w-full p-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">-- Select Status --</option>
+                <option value="1" {{ old('status') == '1' ? 'selected' : '' }}>Active</option>
+                <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>Inactive</option>
+            </select>
+
+            {{-- Status Validation Error --}}
+            @error('status')
+                <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+            @enderror
+        </div>
+
+
             {{-- Submit Button --}}
             <button type="submit"
                 class="px-4 py-2 font-semibold text-white transition duration-200 bg-blue-500 rounded-md hover:bg-blue-600">

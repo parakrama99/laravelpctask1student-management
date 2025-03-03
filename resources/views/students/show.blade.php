@@ -52,6 +52,15 @@ student management
                 </div>
 
                 <div class="flex justify-between">
+                    <span class="font-medium text-gray-600">Status:</span>
+                    <span class="font-semibold
+                        {{ $student->status == 1 ? 'text-green-600' : 'text-red-600' }}">
+                        {{ $student->status == 1 ? 'Active' : 'Inactive' }}
+                    </span>
+                </div>
+
+
+                <div class="flex justify-between">
                     <span class="font-medium text-gray-600">Created At:</span>
                     <span class="font-semibold text-gray-800">{{ $student->created_at->format('d-m-Y') }}</span>
                 </div>
