@@ -10,15 +10,31 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         // dd("ssd"); will output `"ssd"` and immediately stop script execution. It is useful for debugging and checking if a function reaches a certain point.
 
+        $query = Student::query(); // Start the query
 
-        $students = Student::paginate(5);
+        // Add search filter (search by name)
+        if ($request->search) {
+            $query->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('email', 'like', '%' . $request->search . '%'); // You can also search by email if needed
+        }
+
+        // Add status filter
+        if ($request->status) {
+            $status = $request->status == 'active' ? 1 : 0; // Active = 1, Inactive = 0
+            $query->where('status', $status);
+        }
+
+        // Apply pagination and retain search/status filters in URL
+        $students = $query->paginate(5)->appends($request->query()); // Paginate results
+
         // return view('students.index', ['students' => $students]);
-        return view('students.index', compact('students'));
+        return view('students.index', compact('students')); // Return view with students
     }
+
 
     /**
      * Show the form for creating a new resource.
